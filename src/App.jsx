@@ -33,7 +33,7 @@ const StyledDiv = styled.div`
   text-align: center;
 
   .logo {
-    height: ${({ theme }) => (theme.name === "light" ? "10em" : "20em")};
+    height: ${({ theme }) => (theme.name === "light" ? "10em" : "15em")};
     padding: 1.5em;
     will-change: filter;
     transition: filter 300ms;

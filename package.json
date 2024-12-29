@@ -16,7 +16,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.16.13",
     "@mui/material": "^5.16.13",
-    "@reduxjs/toolkit": "^2.2.6",
+    "@reduxjs/toolkit": "^2.5.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

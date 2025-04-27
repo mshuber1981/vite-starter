@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Grid2,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -139,22 +140,42 @@ const GitHubActivity = () => {
               <Stack flexDirection={"column"}>
                 {activityLevels.map((week, weekIndex) => {
                   const level = week[dayIndex];
-                  const colorIndex = Math.min(level, activityColors.length - 1);
+                  let colorIndex;
+                  switch (true) {
+                    case level === 0:
+                      break;
+                    case level >= 1 && level <= 2:
+                      colorIndex = 1;
+                      break;
+                    case level >= 3 && level <= 5:
+                      colorIndex = 2;
+                      break;
+                    case level >= 6 && level <= 8:
+                      colorIndex = 3;
+                      break;
+                    default:
+                      colorIndex = activityColors.length - 1;
+                  }
                   const activityColor = activityColors[colorIndex];
                   return (
-                    <Box
+                    <Tooltip
                       key={`week-${weekIndex}`}
-                      sx={{
-                        width: tileWidth,
-                        height: tileWidth,
-                        border: `1px solid ${
-                          theme.palette.mode === "dark" ? "#444" : "#ccc"
-                        }`,
-                        margin: "0.1rem 0",
-                        borderRadius: "2px",
-                        backgroundColor: activityColor,
-                      }}
-                    />
+                      title={`${level} event${level !== 1 ? "s" : ""}`}
+                      arrow
+                    >
+                      <Box
+                        sx={{
+                          width: tileWidth,
+                          height: tileWidth,
+                          border: `1px solid ${
+                            theme.palette.mode === "dark" ? "#444" : "#ccc"
+                          }`,
+                          margin: "0.1rem 0",
+                          borderRadius: "2px",
+                          backgroundColor: activityColor,
+                        }}
+                      />
+                    </Tooltip>
                   );
                 })}
               </Stack>

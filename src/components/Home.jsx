@@ -2,6 +2,8 @@ import React from "react";
 // Styles
 import { styled, keyframes } from "@mui/system";
 // State
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement, reset } from "../features/counter/counterSlice";
 import PropTypes from "prop-types";
 // Router
 import { Link as RouterLink } from "react-router-dom";
@@ -43,13 +45,6 @@ const StyledLogo = styled("img")(({ theme }) => ({
     },
   },
 }));
-const StyledCard = styled(Box)({
-  padding: "2em",
-  textAlign: "center",
-  ".read-the-docs": {
-    color: "#888",
-  },
-});
 // #endregion
 
 // #region component
@@ -58,7 +53,8 @@ const propTypes = {
   setModes: PropTypes.func.isRequired,
 };
 const Home = ({ content, setModes }) => {
-  const [count, setCount] = React.useState(0);
+  const count = useSelector((state) => state.counter.value); // Access Redux state
+  const dispatch = useDispatch(); // Get the dispatch function
   return (
     <Box sx={{ display: "grid", placeItems: "center" }}>
       <Box sx={{ maxWidth: "90vw", padding: "2rem", textAlign: "center" }}>
@@ -74,20 +70,45 @@ const Home = ({ content, setModes }) => {
         <Typography variant="h1" gutterBottom>
           Vite + React
         </Typography>
-        <StyledCard>
-          <Button
-            variant="contained"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            count is {count}
-          </Button>
+        <Box
+          sx={{
+            padding: "2em",
+            textAlign: "center",
+            ".read-the-docs": {
+              color: "#888",
+            },
+          }}
+        >
           <Typography variant="body1" sx={{ marginTop: "1rem" }}>
             Edit <code>src/App.jsx</code> and save to test HMR
           </Typography>
           <Typography variant="body2" className="read-the-docs">
             Click on the Vite and React logos to learn more
           </Typography>
-        </StyledCard>
+          <Typography variant="body1" sx={{ margin: "1rem 0" }}>
+            Current count is {count}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => dispatch(increment())} // Dispatch increment action
+          >
+            Increment
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => dispatch(decrement())} // Dispatch decrement action
+            sx={{ marginLeft: "1rem" }}
+          >
+            Decrement
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => dispatch(reset())} // Dispatch reset action
+            sx={{ marginLeft: "1rem" }}
+          >
+            Reset
+          </Button>
+        </Box>
         <Button
           component={RouterLink}
           to="/example-route"

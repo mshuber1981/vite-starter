@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useGetUserActivityQuery } from "../features/github/githubApiSlice";
 import {
   Box,
   CircularProgress,
-  Grid2,
+  Grid,
   Stack,
   Tooltip,
   Typography,
@@ -15,8 +15,6 @@ const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const today = new Date();
 const fourWeeksAgo = new Date();
 fourWeeksAgo.setDate(today.getDate() - 28);
-// Create a 2D array for activity levels of the last 4 weeks
-const activityLevels = Array.from({ length: 4 }, () => Array(7).fill(0));
 // Define a consistent tile width
 const tileWidth = "3rem";
 // Define colors for activity levels
@@ -45,9 +43,44 @@ const formatDate = (date) =>
 
 // #region component
 const GitHubActivity = () => {
+  const [activityLevels, setActivityLevels] = useState(
+    Array.from({ length: 4 }, () => Array(7).fill(0))
+  );
   const { data: activities, error, isLoading } = useGetUserActivityQuery();
   const theme = useTheme();
+  // Update activity levels when activities change
+  useEffect(() => {
+    if (activities) {
+      const updatedActivityLevels = Array.from({ length: 4 }, () =>
+        Array(7).fill(0)
+      );
+      activities.forEach((activity) => {
+        const activityDate = new Date(activity.created_at);
+        // Check if the activity date is within the last 4 weeks
+        if (activityDate >= fourWeeksAgo && activityDate <= today) {
+          const weekIndex = Math.floor(
+            (today - activityDate) / (7 * 24 * 60 * 60 * 1000)
+          );
+          const dayIndex = activityDate.getDay();
+          // Increment the activity level for the corresponding week and day
+          if (weekIndex < 4 && dayIndex >= 0 && dayIndex < 7) {
+            updatedActivityLevels[weekIndex][dayIndex]++;
+          }
+        }
+      });
 
+      setActivityLevels(updatedActivityLevels);
+    }
+  }, [activities]);
+  // Use the appropriate color palette based on the theme mode
+  const activityColors =
+    theme.palette.mode === "dark" ? activityColorsDark : activityColorsLight;
+  // Get username from the first activity (fallback to "Unknown User")
+  const username = activities?.[0]?.actor?.login || "Unknown User";
+  // Format the date range for display
+  const dateRange = `${formatDate(fourWeeksAgo)} - ${formatDate(today)}`;
+
+  // Handle loading state
   if (isLoading) {
     return (
       <Box
@@ -57,6 +90,7 @@ const GitHubActivity = () => {
       </Box>
     );
   }
+  // Handle error state
   if (error) {
     return (
       <Typography color="error" sx={{ textAlign: "center", marginTop: "2rem" }}>
@@ -64,29 +98,18 @@ const GitHubActivity = () => {
       </Typography>
     );
   }
+  // Ensure activities is defined and has data
+  if (!activities || activities.length === 0) {
+    return (
+      <Typography
+        color="textSecondary"
+        sx={{ textAlign: "center", marginTop: "2rem" }}
+      >
+        No activity data available.
+      </Typography>
+    );
+  }
 
-  // Fill the activity levels based on the activities data
-  activities.forEach((activity) => {
-    const activityDate = new Date(activity.created_at);
-    // Check if the activity date is within the last 4 weeks
-    if (activityDate >= fourWeeksAgo && activityDate <= today) {
-      const weekIndex = Math.floor(
-        (today - activityDate) / (7 * 24 * 60 * 60 * 1000)
-      );
-      const dayIndex = activityDate.getDay();
-      // Increment the activity level for the corresponding week and day
-      if (weekIndex < 4 && dayIndex >= 0 && dayIndex < 7) {
-        activityLevels[weekIndex][dayIndex]++;
-      }
-    }
-  });
-  // Use the appropriate color palette based on the theme mode
-  const activityColors =
-    theme.palette.mode === "dark" ? activityColorsDark : activityColorsLight;
-  // Get username from the first activity
-  const username = activities[0].actor.login;
-  // Format the date range for display
-  const dateRange = `${formatDate(fourWeeksAgo)} - ${formatDate(today)}`;
   return (
     <Stack
       sx={{
@@ -114,9 +137,9 @@ const GitHubActivity = () => {
         }}
       >
         {/* Days of the Week Grid */}
-        <Grid2 container justifyContent="space-evenly" flexWrap="nowrap">
+        <Grid container justifyContent="space-evenly" flexWrap="nowrap">
           {daysOfWeek.map((day, index) => (
-            <Grid2
+            <Grid
               key={`day-label-${index}`}
               sx={{
                 width: tileWidth,
@@ -130,32 +153,17 @@ const GitHubActivity = () => {
               >
                 {day}
               </Typography>
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
         {/* Activity Grid */}
-        <Grid2 container>
+        <Grid container>
           {Array.from({ length: 7 }).map((_, dayIndex) => (
-            <Grid2 key={`day-${dayIndex}`}>
+            <Grid key={`day-${dayIndex}`}>
               <Stack flexDirection={"column"}>
                 {activityLevels.map((week, weekIndex) => {
                   const level = week[dayIndex];
-                  let colorIndex;
-                  switch (true) {
-                    case level === 0:
-                      break;
-                    case level >= 1 && level <= 2:
-                      colorIndex = 1;
-                      break;
-                    case level >= 3 && level <= 5:
-                      colorIndex = 2;
-                      break;
-                    case level >= 6 && level <= 8:
-                      colorIndex = 3;
-                      break;
-                    default:
-                      colorIndex = activityColors.length - 1;
-                  }
+                  const colorIndex = Math.min(level, activityColors.length - 1);
                   const activityColor = activityColors[colorIndex];
                   return (
                     <Tooltip
@@ -179,9 +187,9 @@ const GitHubActivity = () => {
                   );
                 })}
               </Stack>
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
       </Stack>
     </Stack>
   );

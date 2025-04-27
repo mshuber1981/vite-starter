@@ -1,19 +1,19 @@
 import React from "react";
 // Styles
-import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-// Router
-import { HashRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import ExampleRoute from "./pages/ExampleRoute";
-import NotFound from "./pages/NotFound";
 // State
 import { useDispatch, useSelector } from "react-redux";
 import { selectMode, setMode } from "./app/appSlice";
-import { useGetUsersQuery } from "./app/apiSlice";
-// Util
-import { getStoredMode, getPreferredMode } from "./utils";
+import { useGetUserQuery } from "./features/github/githubApiSlice";
+// Router
+import { HashRouter, Routes, Route } from "react-router-dom";
+// Components
+import Home from "./components/Home";
+import ExampleRoute from "./components/ExampleRoute";
+import NotFound from "./components/NotFound";
+
+export const getStoredMode = () => localStorage.getItem("mode");
 
 // #region component
 const App = () => {
@@ -25,42 +25,8 @@ const App = () => {
     isSuccess,
     isError,
     error,
-  } = useGetUsersQuery();
+  } = useGetUserQuery();
   let content;
-
-  const setModes = React.useCallback(
-    (mode) => {
-      if (mode) {
-        dispatch(setMode(mode));
-      } else {
-        dispatch(setMode(getPreferredMode()));
-      }
-    },
-    [dispatch]
-  );
-
-  React.useEffect(() => {
-    setModes();
-  }, [setModes]);
-
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => {
-      const storedMode = getStoredMode();
-      if (storedMode !== "light" && storedMode !== "dark") {
-        setModes();
-      }
-    });
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode]
-  );
 
   if (isLoading) {
     content = <p>Loading...</p>;
@@ -76,21 +42,61 @@ const App = () => {
     }
   }
 
+  const getPreferredMode = () => {
+    const storedMode = getStoredMode();
+    if (storedMode) {
+      return storedMode;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+  const setModes = React.useCallback(
+    (mode) => {
+      if (mode) {
+        dispatch(setMode(mode));
+      } else {
+        dispatch(setMode(getPreferredMode()));
+      }
+    },
+    [dispatch]
+  );
+  React.useEffect(() => {
+    setModes();
+  }, [setModes]);
+  // Listen for changes in the user's preferred color scheme
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      const storedMode = getStoredMode();
+      if (storedMode !== "light" && storedMode !== "dark") {
+        setModes();
+      }
+    });
+  // Create a theme based on the current mode (light or dark)
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
   return (
     <>
       <HashRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <EmotionThemeProvider theme={{ name: theme.palette.mode }}>
-            <Routes>
-              <Route
-                path="/"
-                element={<Home content={content} setModes={setModes} />}
-              />
-              <Route path="/example-route" element={<ExampleRoute />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </EmotionThemeProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={<Home content={content} setModes={setModes} />}
+            />
+            <Route path="/example-route" element={<ExampleRoute />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </ThemeProvider>
       </HashRouter>
     </>

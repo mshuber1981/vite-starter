@@ -1,4 +1,3 @@
-// https://redux-toolkit.js.org/usage/usage-guide#simplifying-slices-with-createslice
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

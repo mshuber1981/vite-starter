@@ -1,21 +1,13 @@
 import React from "react";
-// Icons
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 // State
 import { useSelector } from "react-redux";
 import { selectMode } from "../app/appSlice";
 import PropTypes from "prop-types";
 // Components
-import { Box, IconButton } from "@mui/material";
-
-// #region constants
-
-// #endregion
-
-// #region styled-components
-
-// #endregion
+import { Box, IconButton, Stack } from "@mui/material";
+// Icons
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 // #region functions
 const setStoredMode = (mode) => localStorage.setItem("mode", mode);
@@ -34,14 +26,12 @@ const ToggleMode = ({ setMode }) => {
     setMode(newMode);
     setStoredMode(newMode);
   };
-
   return (
-    <Box
+    <Stack
+      alignItems={"center"}
+      justifyContent={"center"}
       sx={{
-        display: "flex",
         width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
         borderRadius: 1,
         p: 3,
       }}
@@ -54,7 +44,7 @@ const ToggleMode = ({ setMode }) => {
       >
         {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
-    </Box>
+    </Stack>
   );
 };
 

@@ -1,14 +1,15 @@
-// https://redux-toolkit.js.org/usage/usage-guide#simplifying-slices-with-createslice
 import { configureStore } from "@reduxjs/toolkit";
+import githubApiSlice from "../features/github/githubApiSlice";
 import appReducer from "./appSlice";
-import { apiSlice } from "./apiSlice";
+import githubReducer from "../features/github/githubSlice";
 
 export const store = configureStore({
   reducer: {
+    [githubApiSlice.reducerPath]: githubApiSlice.reducer,
     app: appReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    github: githubReducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(apiSlice.middleware);
+    return getDefaultMiddleware().concat(githubApiSlice.middleware);
   },
 });

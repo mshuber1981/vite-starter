@@ -1,7 +1,7 @@
 import React from "react";
 // Styles
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { CircularProgress, CssBaseline } from "@mui/material";
 // State
 import { useDispatch, useSelector } from "react-redux";
 import { selectMode, setMode } from "./app/appSlice";
@@ -29,7 +29,7 @@ const App = () => {
   let content;
 
   if (isLoading) {
-    content = <p>Loading...</p>;
+    content = <CircularProgress />;
   } else if (isSuccess) {
     content = (
       <p>{`My name is ${userData.name} and I have ${userData.public_repos} public GitHub repos.`}</p>

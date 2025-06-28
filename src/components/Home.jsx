@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 // Router
 import { Link as RouterLink } from "react-router-dom";
 // Components
-import { Box, Button, Typography, Link as MuiLink } from "@mui/material";
+import { Box, Button, Typography, Link as MuiLink, Stack } from "@mui/material";
 import ToggleMode from "./ToggleMode";
 import GitHubActivity from "./GitHubActivity";
 // Assets
@@ -53,8 +53,17 @@ const propTypes = {
   setModes: PropTypes.func.isRequired,
 };
 const Home = ({ content, setModes }) => {
-  const count = useSelector((state) => state.counter.value); // Access Redux state
-  const dispatch = useDispatch(); // Get the dispatch function
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  // Local state to simulate an error
+  const [simulateError, setSimulateError] = React.useState(false);
+
+  // Throw error when simulateError is true
+  if (simulateError) {
+    throw new Error("Simulated error for testing ErrorBoundary!");
+  }
+
   return (
     <Box sx={{ display: "grid", placeItems: "center" }}>
       <Box sx={{ maxWidth: "90vw", padding: "2rem", textAlign: "center" }}>
@@ -88,32 +97,52 @@ const Home = ({ content, setModes }) => {
           <Typography variant="body1" sx={{ margin: "1rem 0" }}>
             Current count is {count}
           </Typography>
-          <Button
-            variant="contained"
-            onClick={() => dispatch(increment())} // Dispatch increment action
+          <Stack
+            direction="column"
+            spacing={2}
+            justifyContent="center"
+            sx={{ maxWidth: 200, width: "100%", mx: "auto" }}
           >
-            Increment
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => dispatch(decrement())} // Dispatch decrement action
-            sx={{ marginLeft: "1rem" }}
-          >
-            Decrement
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => dispatch(reset())} // Dispatch reset action
-            sx={{ marginLeft: "1rem" }}
-          >
-            Reset
-          </Button>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(increment())}
+              fullWidth
+            >
+              Increment
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(decrement())}
+              sx={{ marginLeft: "1rem" }}
+              fullWidth
+            >
+              Decrement
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(reset())}
+              sx={{ marginLeft: "1rem" }}
+              fullWidth
+            >
+              Reset
+            </Button>
+            {/* Simulate Error Button */}
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{ marginLeft: "1rem" }}
+              onClick={() => setSimulateError(true)}
+              fullWidth
+            >
+              Simulate Error
+            </Button>
+          </Stack>
         </Box>
         <Button
           component={RouterLink}
           to="/example-route"
           variant="outlined"
-          sx={{ marginTop: "1rem" }}
+          sx={{ marginTop: "1rem", maxWidth: 200, width: "100%" }}
         >
           Go to Example route
         </Button>

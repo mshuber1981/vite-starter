@@ -10,11 +10,25 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 // Components
 import App from "./App";
+import { ErrorBoundary } from "react-error-boundary";
+
+// Simple fallback component
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div role="alert" style={{ padding: 32, textAlign: "center" }}>
+      <h2>Something went wrong.</h2>
+      <pre style={{ color: "red" }}>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <App />
+      </ErrorBoundary>
     </Provider>
   </React.StrictMode>
 );

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Box, Typography, Button, Paper } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import React from "react";
+import { Box, Typography, Button, Paper } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -15,11 +15,11 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // Log the error to console or error reporting service
-    console.error('Error Boundary caught an error:', error, errorInfo);
-    
+    console.error("Error Boundary caught an error:", error, errorInfo);
+
     this.setState({
       error: error,
-      errorInfo: errorInfo
+      errorInfo: errorInfo,
     });
   }
 
@@ -34,28 +34,28 @@ class ErrorBoundary extends React.Component {
       return (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "100vh",
             padding: 3,
-            bgcolor: 'background.default',
+            bgcolor: "background.default",
           }}
         >
           <Paper
             elevation={3}
             sx={{
               padding: 4,
-              textAlign: 'center',
+              textAlign: "center",
               maxWidth: 600,
-              width: '100%',
+              width: "100%",
             }}
           >
             <ErrorOutlineIcon
               sx={{
                 fontSize: 64,
-                color: 'error.main',
+                color: "error.main",
                 mb: 2,
               }}
             />
@@ -63,9 +63,10 @@ class ErrorBoundary extends React.Component {
               Oops! Something went wrong
             </Typography>
             <Typography variant="body1" color="text.secondary" paragraph>
-              We apologize for the inconvenience. An unexpected error has occurred.
+              We apologize for the inconvenience. An unexpected error has
+              occurred.
             </Typography>
-            
+
             {import.meta.env.DEV && this.state.error && (
               <Box sx={{ mt: 2, mb: 2 }}>
                 <Typography variant="h6" color="error" gutterBottom>
@@ -75,20 +76,24 @@ class ErrorBoundary extends React.Component {
                   variant="outlined"
                   sx={{
                     padding: 2,
-                    bgcolor: 'grey.50',
-                    textAlign: 'left',
-                    overflow: 'auto',
+                    bgcolor: "grey.50",
+                    textAlign: "left",
+                    overflow: "auto",
                     maxHeight: 200,
                   }}
                 >
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                  <Typography
+                    variant="body2"
+                    component="pre"
+                    sx={{ fontFamily: "monospace" }}
+                  >
                     {this.state.error.toString()}
                     {this.state.errorInfo.componentStack}
                   </Typography>
                 </Paper>
               </Box>
             )}
-            
+
             <Button
               variant="contained"
               color="primary"

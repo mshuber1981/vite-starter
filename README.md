@@ -11,10 +11,13 @@ A React + Vite template with Material-UI and a CLI for project configuration.
 - 🧪 **Jest Testing** - Comprehensive testing suite
 - 📱 **Responsive Design** - Mobile-first approach
 - 🌙 **Theme Toggle** - Light/dark mode switching
+- 🚀 **React Router** - Client-side routing with 404 handling
+- 🌐 **GitHub Pages Ready** - Pre-configured for easy deployment
 
 ## Quick Start
 
 ### Installation & Setup
+
 ```bash
 npm install
 
@@ -23,11 +26,21 @@ npm run config
 ```
 
 ### Development
+
 ```bash
 npm run dev
 ```
 
+### Deployment to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+See [DEPLOY.md](./DEPLOY.md) for detailed deployment instructions.
+
 ### Interactive Configuration
+
 Run the configuration to set your primary theme color:
 
 ```bash
@@ -35,8 +48,9 @@ npm run config
 ```
 
 Features include:
+
 - 🎨 **Stable Arrow Key Navigation** - Smooth ↑↓ navigation with no screen flickering
-- 🌈 **Numbered Color Menu** - Clean numbered list (1-10) with color previews and hex codes  
+- 🌈 **Numbered Color Menu** - Clean numbered list (1-10) with color previews and hex codes
 - 🎯 **Dynamic Selection Indicator** - Real-time highlighting shows current selection
 - 🎭 **Professional Interface** - ASCII banner with clean, organized layout
 - ✨ **Current Color Markers** - Clearly shows active color with "● CURRENT"
@@ -47,10 +61,11 @@ Features include:
 ## Configuration Features
 
 ### 🎨 Guided Color Selection
+
 Choose from 10 predefined Material Design colors for your primary theme:
 
 - **Blue** (#1976d2) - Classic Material Design blue
-- **Purple** (#9c27b0) - Rich purple accent  
+- **Purple** (#9c27b0) - Rich purple accent
 - **Teal** (#009688) - Modern teal green
 - **Orange** (#ff9800) - Warm orange tone
 - **Red** (#f44336) - Bold red accent
@@ -61,6 +76,7 @@ Choose from 10 predefined Material Design colors for your primary theme:
 - **Cyan** (#00bcd4) - Electric cyan
 
 ### ⚙️ Configuration Management
+
 - Persistent project configuration
 - Theme customization
 - User preferences storage
@@ -78,6 +94,7 @@ npm run test:coverage # Generate coverage reports
 **Current Coverage:** 100% statements, 100% branches, 100% functions, 100% lines
 
 ### Test Structure
+
 - **48 passing tests** across 3 test suites
 - **Unit tests** - Individual function testing
 - **Integration tests** - Real file operations and workflows

@@ -1,10 +1,20 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import ghPages from "./scripts/gh-pages";
-import config from "./src/app/config.json";
+import react from "@vitejs/plugin-react";
+import ghPages from "./scripts/gh-pages.js";
+import { readFileSync } from "fs";
 
-// https://vitejs.dev/config/
+// Get repository name from package.json
+function getRepoName() {
+  try {
+    const packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
+    return packageJson.name;
+  } catch {
+    return "vite-starter"; // fallback
+  }
+}
+
+// https://vite.dev/config/
 export default defineConfig({
-  base: `/${config.repoName}/`,
+  base: `/${getRepoName()}/`,
   plugins: [react(), ghPages()],
 });

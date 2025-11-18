@@ -1,161 +1,145 @@
-import React from "react";
-// Styles
-import { styled, keyframes } from "@mui/system";
-// State
-import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, reset } from "../features/counter/counterSlice";
-import PropTypes from "prop-types";
-// Router
-import { Link as RouterLink } from "react-router-dom";
-// Components
-import { Box, Button, Typography, Link as MuiLink, Stack } from "@mui/material";
-import ToggleMode from "./ToggleMode";
-import GitHubActivity from "./GitHubActivity";
-// Assets
-import viteLogo from "/vite.svg";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import reactLogo from "../assets/react.svg";
+import viteLogo from "/vite.svg";
+import ThemeToggle from "./ThemeToggle";
+import { useTheme } from "@mui/material/styles";
 
-// #region styled-components
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
+function Home() {
+  const [count, setCount] = useState(0);
+  const [shouldThrowError, setShouldThrowError] = useState(false);
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
+
+  if (shouldThrowError) {
+    throw new Error("Test error boundary!");
   }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-const StyledLogo = styled("img")(({ theme }) => ({
-  height: "10em",
-  padding: "1.5em",
-  willChange: "filter",
-  transition: "filter 300ms",
-  "&:hover": {
-    filter: `drop-shadow(0 0 2em ${
-      theme.palette.mode === "dark" ? "#9c27b0aa" : "#646cffaa"
-    })`,
-  },
-  "&.react:hover": {
-    filter: `drop-shadow(0 0 2em ${
-      theme.palette.mode === "dark" ? "#bb86fc" : "#61dbfb"
-    })`,
-  },
-  "&.react": {
-    "@media (prefers-reduced-motion: no-preference)": {
-      animation: `${spin} infinite 20s linear`,
-    },
-  },
-}));
-// #endregion
 
-// #region component
-const propTypes = {
-  content: PropTypes.element.isRequired,
-  setModes: PropTypes.func.isRequired,
-};
-const Home = ({ content, setModes }) => {
-  const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
-
-  // Local state to simulate an error
-  const [simulateError, setSimulateError] = React.useState(false);
-
-  // Throw error when simulateError is true
-  if (simulateError) {
-    throw new Error("Simulated error for testing ErrorBoundary!");
-  }
+  const handleTestError = () => {
+    setShouldThrowError(true);
+  };
 
   return (
-    <Box sx={{ display: "grid", placeItems: "center" }}>
-      <Box sx={{ maxWidth: "90vw", padding: "2rem", textAlign: "center" }}>
-        <Box>
-          <MuiLink href="https://vitejs.dev" target="_blank">
-            <StyledLogo src={viteLogo} alt="Vite logo" />
-          </MuiLink>
-          <MuiLink href="https://react.dev" target="_blank">
-            <StyledLogo src={reactLogo} className="react" alt="React logo" />
-          </MuiLink>
-          <ToggleMode setMode={setModes} />
-        </Box>
-        <Typography variant="h1" gutterBottom>
-          Vite + React
-        </Typography>
+    <Stack
+      spacing={3}
+      sx={{
+        maxWidth: 1280,
+        margin: "0 auto",
+        padding: 4,
+        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
+      <Box>
         <Box
-          sx={{
-            padding: "2em",
-            textAlign: "center",
-            ".read-the-docs": {
-              color: "#888",
-            },
-          }}
+          component="a"
+          href="https://vite.dev"
+          target="_blank"
+          sx={{ display: "inline-block" }}
         >
-          <Typography variant="body1" sx={{ marginTop: "1rem" }}>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </Typography>
-          <Typography variant="body2" className="read-the-docs">
-            Click on the Vite and React logos to learn more
-          </Typography>
-          <Typography variant="body1" sx={{ margin: "1rem 0" }}>
-            Current count is {count}
-          </Typography>
-          <Stack
-            direction="column"
-            spacing={2}
-            justifyContent="center"
-            sx={{ maxWidth: 200, width: "100%", mx: "auto" }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => dispatch(increment())}
-              fullWidth
-            >
-              Increment
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => dispatch(decrement())}
-              sx={{ marginLeft: "1rem" }}
-              fullWidth
-            >
-              Decrement
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => dispatch(reset())}
-              sx={{ marginLeft: "1rem" }}
-              fullWidth
-            >
-              Reset
-            </Button>
-            {/* Simulate Error Button */}
-            <Button
-              variant="outlined"
-              color="error"
-              sx={{ marginLeft: "1rem" }}
-              onClick={() => setSimulateError(true)}
-              fullWidth
-            >
-              Simulate Error
-            </Button>
-          </Stack>
+          <Box
+            component="img"
+            src={viteLogo}
+            alt="Vite logo"
+            sx={{
+              height: "6em",
+              padding: "1.5em",
+              willChange: "filter",
+              transition: "filter 300ms",
+              "&:hover": {
+                filter: "drop-shadow(0 0 2em #646cffaa)",
+              },
+            }}
+          />
         </Box>
-        <Button
-          component={RouterLink}
-          to="/example-route"
-          variant="outlined"
-          sx={{ marginTop: "1rem", maxWidth: 200, width: "100%" }}
+        <Box
+          component="a"
+          href="https://react.dev"
+          target="_blank"
+          sx={{ display: "inline-block" }}
         >
-          Go to Example route
-        </Button>
-        <Typography variant="h2" sx={{ marginTop: "2rem" }}>
-          API Info
-        </Typography>
-        {content}
-        <GitHubActivity />
+          <Box
+            component="img"
+            src={reactLogo}
+            alt="React logo"
+            sx={{
+              height: "6em",
+              padding: "1.5em",
+              willChange: "filter",
+              transition: "filter 300ms",
+              animation: "logo-spin infinite 20s linear",
+              "&:hover": {
+                filter: "drop-shadow(0 0 2em #61dafbaa)",
+              },
+              "@keyframes logo-spin": {
+                from: {
+                  transform: "rotate(0deg)",
+                },
+                to: {
+                  transform: "rotate(360deg)",
+                },
+              },
+            }}
+          />
+        </Box>
       </Box>
-    </Box>
+
+      <ThemeToggle />
+
+      <Typography
+        variant="h1"
+        sx={{
+          fontSize: "3.2em",
+          lineHeight: 1.1,
+          background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${
+            isDarkMode ? "#ffffff" : "#000000"
+          })`,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Vite + React + MUI
+      </Typography>
+
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={() => setCount((count) => count + 1)}
+        >
+          Count is {count}
+        </Button>
+
+        <Button component={Link} to="/example" variant="contained" size="large">
+          Go to Example
+        </Button>
+      </Stack>
+
+      <Button
+        variant="outlined"
+        color="error"
+        size="large"
+        onClick={handleTestError}
+        sx={{ mt: 2 }}
+      >
+        Test Error Boundary
+      </Button>
+
+      <Stack spacing={2} sx={{ maxWidth: 600, textAlign: "left" }}>
+        <Typography variant="body1" color="text.secondary">
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary">
+          Click on the Vite and React logos to learn more
+        </Typography>
+      </Stack>
+    </Stack>
   );
-};
-Home.propTypes = propTypes;
-// #endregion
+}
 
 export default Home;

@@ -6,11 +6,13 @@ const getPackageName = () => {
   const pkg_path = path.join(process.cwd(), "package.json");
   if (!fs.existsSync(pkg_path)) return;
 
-  const pkg = JSON.parse(fs.readFileSync(pkg_path, "utf-8"));
-  return pkg?.name ?? undefined;
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkg_path, "utf-8"));
+    return pkg?.name ?? undefined;
+  } catch {
+    return undefined;
+  }
 };
-
-console.log(getPackageName());
 
 export const ghPages = (options) => {
   let outDir = "";
@@ -29,7 +31,10 @@ export const ghPages = (options) => {
     enforce: "post",
     config(config) {
       if (config.base === undefined) {
-        config.base = "/" + getPackageName() + "/";
+        const packageName = getPackageName();
+        if (packageName) {
+          config.base = "/" + packageName + "/";
+        }
       }
     },
     configResolved(resolvedConfig) {

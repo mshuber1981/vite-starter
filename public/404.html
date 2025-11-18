@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // GitHub Pages 404 redirect for client-side routing
+      // This script takes the current URL and redirects to the index page
+      // with the path encoded as a query parameter that React Router can handle
+
+      var pathSegmentsToKeep = 1;
+
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join("/") +
+          "/?/" +
+          l.pathname
+            .slice(1)
+            .split("/")
+            .slice(pathSegmentsToKeep)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash
+      );
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <h1>JavaScript is required</h1>
+      <p>
+        This site uses client-side routing which requires JavaScript to be
+        enabled.
+      </p>
+      <p><a href="/vite-starter/">Return to home page</a></p>
+    </noscript>
+  </body>
+</html>

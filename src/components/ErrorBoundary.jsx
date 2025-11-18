@@ -67,7 +67,7 @@ class ErrorBoundary extends React.Component {
               occurred.
             </Typography>
 
-            {import.meta.env.DEV && this.state.error && (
+            {import.meta.env?.DEV && this.state.error && (
               <Box sx={{ mt: 2, mb: 2 }}>
                 <Typography variant="h6" color="error" gutterBottom>
                   Error Details (Development Mode):
@@ -76,7 +76,7 @@ class ErrorBoundary extends React.Component {
                   variant="outlined"
                   sx={{
                     padding: 2,
-                    bgcolor: "grey.50",
+                    bgcolor: (theme) => theme.palette.mode === 'light' ? 'grey.50' : 'grey.900',
                     textAlign: "left",
                     overflow: "auto",
                     maxHeight: 200,
@@ -85,10 +85,10 @@ class ErrorBoundary extends React.Component {
                   <Typography
                     variant="body2"
                     component="pre"
-                    sx={{ fontFamily: "monospace" }}
+                    sx={{ fontFamily: "monospace", whiteSpace: "pre-wrap" }}
                   >
                     {this.state.error.toString()}
-                    {this.state.errorInfo.componentStack}
+                    {this.state.errorInfo?.componentStack}
                   </Typography>
                 </Paper>
               </Box>

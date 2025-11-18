@@ -4,8 +4,11 @@ import ExampleRoute from "./components/ExampleRoute";
 import NotFound from "./components/NotFound";
 
 function App() {
+  // Get basename from Vite's base URL for GitHub Pages deployment
+  const basename = import.meta.env.BASE_URL;
+
   return (
-    <Router>
+    <Router basename={basename}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/example" element={<ExampleRoute />} />

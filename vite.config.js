@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { readFileSync } from "fs";
-import { fileURLToPath, URL } from "url";
 
 // Auto-detect repository name from package.json
 function getRepoName() {

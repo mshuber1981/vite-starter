@@ -8,12 +8,17 @@ import { useTheme } from "@mui/material/styles";
 
 function Home() {
   const [count, setCount] = useState(0);
+  const [shouldThrowError, setShouldThrowError] = useState(false);
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
 
-  if (count === 5) {
+  if (shouldThrowError) {
     throw new Error("Test error boundary!");
   }
+
+  const handleTestError = () => {
+    setShouldThrowError(true);
+  };
 
   return (
     <Stack
@@ -82,6 +87,8 @@ function Home() {
         </Box>
       </Box>
 
+      <ThemeToggle />
+
       <Typography
         variant="h1"
         sx={{
@@ -112,6 +119,16 @@ function Home() {
         </Button>
       </Stack>
 
+      <Button
+        variant="outlined"
+        color="error"
+        size="large"
+        onClick={handleTestError}
+        sx={{ mt: 2 }}
+      >
+        Test Error Boundary
+      </Button>
+
       <Stack spacing={2} sx={{ maxWidth: 600, textAlign: "left" }}>
         <Typography variant="body1" color="text.secondary">
           Edit <code>src/App.jsx</code> and save to test HMR
@@ -121,8 +138,6 @@ function Home() {
           Click on the Vite and React logos to learn more
         </Typography>
       </Stack>
-
-      <ThemeToggle />
     </Stack>
   );
 }

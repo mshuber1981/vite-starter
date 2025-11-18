@@ -27,6 +27,12 @@ export default defineConfig([
     },
   },
   {
+    files: ["vite.config.js", "jest.config.js", "scripts/**/*.js"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
     files: ["**/__tests__/**/*.js", "**/*.test.js", "**/*.spec.js"],
     languageOptions: {
       globals: {

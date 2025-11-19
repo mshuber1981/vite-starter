@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ExampleRoute from "./components/ExampleRoute";
 import NotFound from "./components/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   // Get basename from Vite's base URL for GitHub Pages deployment
@@ -9,6 +10,7 @@ function App() {
 
   return (
     <Router basename={basename}>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/example" element={<ExampleRoute />} />

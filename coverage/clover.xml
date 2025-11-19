@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1763557976778" clover="3.2.0">
+  <project timestamp="1763557976778" name="All files">
+    <metrics statements="43" coveredstatements="43" conditionals="18" coveredconditionals="18" methods="15" coveredmethods="15" elements="76" coveredelements="76" complexity="0" loc="43" ncloc="43" packages="1" files="2" classes="2"/>
+    <file name="configure-utils.js" path="/Users/michael.huber1.ext/github/personal/vite-starter/scripts/configure-utils.js">
+      <metrics statements="20" coveredstatements="20" conditionals="4" coveredconditionals="4" methods="7" coveredmethods="7"/>
+      <line num="6" count="2" type="stmt"/>
+      <line num="23" count="21" type="stmt"/>
+      <line num="24" count="21" type="cond" truecount="2" falsecount="0"/>
+      <line num="25" count="19" type="stmt"/>
+      <line num="26" count="18" type="stmt"/>
+      <line num="29" count="6" type="stmt"/>
+      <line num="34" count="8" type="stmt"/>
+      <line num="41" count="15" type="stmt"/>
+      <line num="46" count="15" type="stmt"/>
+      <line num="47" count="15" type="stmt"/>
+      <line num="48" count="14" type="stmt"/>
+      <line num="50" count="1" type="stmt"/>
+      <line num="51" count="1" type="stmt"/>
+      <line num="59" count="33" type="stmt"/>
+      <line num="60" count="33" type="cond" truecount="2" falsecount="0"/>
+      <line num="61" count="3" type="stmt"/>
+      <line num="63" count="30" type="stmt"/>
+      <line num="70" count="63" type="stmt"/>
+      <line num="77" count="44" type="stmt"/>
+      <line num="84" count="20" type="stmt"/>
+    </file>
+    <file name="gh-pages.js" path="/Users/michael.huber1.ext/github/personal/vite-starter/scripts/gh-pages.js">
+      <metrics statements="23" coveredstatements="23" conditionals="14" coveredconditionals="14" methods="8" coveredmethods="8"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="4" type="stmt"/>
+      <line num="7" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="9" count="3" type="stmt"/>
+      <line num="10" count="3" type="stmt"/>
+      <line num="11" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="17" count="1" type="stmt"/>
+      <line num="18" count="18" type="stmt"/>
+      <line num="20" count="18" type="cond" truecount="2" falsecount="0"/>
+      <line num="23" count="18" type="cond" truecount="2" falsecount="0"/>
+      <line num="25" count="5" type="stmt"/>
+      <line num="28" count="18" type="stmt"/>
+      <line num="33" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="34" count="4" type="stmt"/>
+      <line num="35" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="36" count="1" type="stmt"/>
+      <line num="41" count="9" type="stmt"/>
+      <line num="44" count="8" type="stmt"/>
+      <line num="51" count="8" type="stmt"/>
+      <line num="53" count="8" type="stmt"/>
+      <line num="54" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="55" count="6" type="stmt"/>
+    </file>
+  </project>
+</coverage>

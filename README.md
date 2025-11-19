@@ -33,6 +33,10 @@ npm run dev
 
 ### Deployment to GitHub Pages
 
+**First time setup** (if you cloned/forked this repo):
+1. Update repository URLs in `package.json` to match your repo
+2. Run deployment:
+
 ```bash
 npm run deploy
 ```
@@ -47,16 +51,24 @@ Run the configuration to set your primary theme color:
 npm run config
 ```
 
-Features include:
+```
+\ \   / (_) |_ ___  / ___|| |_ __ _ _ __| |_ ___ _ __ 
+ \ \ / /| | __/ _ \ \___ \| __/ _` | '__| __/ _ \ '__|
+  \ V / | | ||  __/  ___) | || (_| | |  | ||  __/ |   
+   \_/  |_|\__\___| |____/ \__\__,_|_|   \__\___|_|   
+                                                      
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Theme Configuration Tool
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- 🎨 **Stable Arrow Key Navigation** - Smooth ↑↓ navigation with no screen flickering
-- 🌈 **Numbered Color Menu** - Clean numbered list (1-10) with color previews and hex codes
-- 🎯 **Dynamic Selection Indicator** - Real-time highlighting shows current selection
-- 🎭 **Professional Interface** - ASCII banner with clean, organized layout
-- ✨ **Current Color Markers** - Clearly shows active color with "● CURRENT"
-- ✅ **Confirmation Prompts** - Safe selection process prevents accidental changes
-- 🔧 **Cross-Platform** - Reliable interface works on all operating systems
-- ⚡ **Instant Theme Integration** - Colors immediately available to React app
+Current theme: blue ●
+
+? What would you like to do?
+❯ Change primary color
+  Quit
+
+↑↓ navigate • ⏎ select
+```
 
 ## Configuration Features
 
@@ -79,7 +91,7 @@ Choose from 10 predefined Material Design colors for your primary theme:
 
 - Persistent project configuration
 - Theme customization
-- User preferences storage
+- User preferences local storage
 
 ## Testing
 
@@ -90,16 +102,6 @@ npm test              # Run all tests
 npm run test:watch    # Watch mode for development
 npm run test:coverage # Generate coverage reports
 ```
-
-**Current Coverage:** 100% statements, 100% branches, 100% functions, 100% lines
-
-### Test Structure
-
-- **48 passing tests** across 3 test suites
-- **Unit tests** - Individual function testing
-- **Integration tests** - Real file operations and workflows
-- **CLI structure tests** - Menu validation and error handling
-- **Edge case coverage** - Invalid inputs, corrupted files, permission errors
 
 ## Project Structure
 

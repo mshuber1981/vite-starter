@@ -7,7 +7,15 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
-import { ghPages } from "../gh-pages.js";
+// Mock gh-pages module before importing the module under test
+const mockPublish = jest.fn();
+jest.unstable_mockModule("gh-pages", () => ({
+  default: {
+    publish: mockPublish
+  }
+}));
+
+const { ghPages } = await import("../gh-pages.js");
 
 describe("gh-pages Vite Plugin", () => {
   let tempDir;
@@ -23,6 +31,11 @@ describe("gh-pages Vite Plugin", () => {
     // Write test package.json
     fs.writeFileSync(testPackageJson, JSON.stringify({ name: "test-package" }));
     
+    // Create dist directory for testing
+    const distDir = path.join(tempDir, "dist");
+    fs.mkdirSync(distDir, { recursive: true });
+    fs.writeFileSync(path.join(distDir, "index.html"), "<html></html>");
+    
     // Change to temp directory
     process.chdir(tempDir);
   });
@@ -33,6 +46,13 @@ describe("gh-pages Vite Plugin", () => {
     
     // Clean up temp directory
     try {
+      const distDir = path.join(tempDir, "dist");
+      if (fs.existsSync(path.join(distDir, "index.html"))) {
+        fs.unlinkSync(path.join(distDir, "index.html"));
+      }
+      if (fs.existsSync(distDir)) {
+        fs.rmdirSync(distDir);
+      }
       if (fs.existsSync(testPackageJson)) {
         fs.unlinkSync(testPackageJson);
       }
@@ -131,6 +151,177 @@ describe("gh-pages Vite Plugin", () => {
       
       const plugin = ghPages(customOptions);
       expect(plugin.name).toBe("vite:gh-pages");
+    });
+
+    test("should create plugin with default callbacks when none provided", () => {
+      const plugin = ghPages();
+      
+      // Plugin should be created successfully with default callbacks
+      expect(plugin.name).toBe("vite:gh-pages");
+      expect(typeof plugin.closeBundle).toBe("function");
+    });
+  });
+
+  describe("closeBundle functionality", () => {
+    beforeEach(() => {
+      // Reset the mock before each test
+      mockPublish.mockClear();
+    });
+
+    test("should call gh-pages publish with correct options", async () => {
+      const plugin = ghPages();
+      
+      // Set up the resolved config
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      // Mock successful publish
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(mockPublish).toHaveBeenCalledWith(
+        "dist",
+        {
+          dotfiles: true,
+          branch: "gh-pages",
+          nojekyll: true
+        },
+        expect.any(Function)
+      );
+    });
+
+    test("should call onBeforePublish callback when provided", async () => {
+      const onBeforePublish = jest.fn();
+      const plugin = ghPages({ onBeforePublish });
+      
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(onBeforePublish).toHaveBeenCalledWith({
+        dotfiles: true,
+        branch: "gh-pages",
+        nojekyll: true,
+        outDir: "dist",
+        onBeforePublish: expect.any(Function)
+      });
+    });
+
+    test("should call custom onError callback when gh-pages fails", async () => {
+      const onError = jest.fn();
+      const plugin = ghPages({ onError });
+      
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      const testError = new Error("Publishing failed");
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(testError); // Call error callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(onError).toHaveBeenCalledWith(testError);
+    });
+
+    test("should call default onError callback when gh-pages fails and no custom callback provided", async () => {
+      const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+      const plugin = ghPages();
+      
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      const testError = new Error("Publishing failed");
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(testError); // Call error callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(consoleSpy).toHaveBeenCalledWith(testError);
+      consoleSpy.mockRestore();
+    });
+
+    test("should call custom onPublish callback when gh-pages succeeds", async () => {
+      const onPublish = jest.fn();
+      const plugin = ghPages({ onPublish });
+      
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(onPublish).toHaveBeenCalledWith({
+        dotfiles: true,
+        branch: "gh-pages",
+        nojekyll: true,
+        outDir: "dist",
+        onPublish: expect.any(Function)
+      });
+    });
+
+    test("should call default onPublish callback when gh-pages succeeds and no custom callback provided", async () => {
+      const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+      const plugin = ghPages();
+      
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(consoleSpy).toHaveBeenCalledWith("🎉 Published `dist` to branch `gh-pages`.");
+      consoleSpy.mockRestore();
+    });
+
+    test("should merge custom options with defaults", async () => {
+      const customOptions = {
+        branch: "custom-branch",
+        message: "Custom commit message",
+        user: { name: "Test User", email: "test@example.com" }
+      };
+      
+      const plugin = ghPages(customOptions);
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      await plugin.closeBundle();
+
+      expect(mockPublish).toHaveBeenCalledWith(
+        "dist",
+        {
+          dotfiles: true,
+          branch: "custom-branch", // Should override default
+          nojekyll: true,
+          message: "Custom commit message",
+          user: { name: "Test User", email: "test@example.com" }
+        },
+        expect.any(Function)
+      );
+    });
+
+    test("should not call onBeforePublish if not provided", async () => {
+      const plugin = ghPages();
+      plugin.configResolved({ build: { outDir: "dist" } });
+      
+      mockPublish.mockImplementation((outDir, options, callback) => {
+        callback(); // Call success callback
+      });
+
+      // Should not throw error when onBeforePublish is undefined
+      await expect(plugin.closeBundle()).resolves.not.toThrow();
     });
   });
 });

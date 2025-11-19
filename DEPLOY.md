@@ -2,18 +2,25 @@
 
 This project is pre-configured to deploy to GitHub Pages with client-side routing support.
 
+## ⚠️ Important: First-Time Setup Required
+
+**If you cloned, forked, or used this as a template**, you MUST update the URLs in `package.json`:
+
+```json
+{
+  "name": "your-new-repo-name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
+  },
+  "homepage": "https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/"
+}
+```
+
 ## Quick Setup
 
-1. **Fork or clone this repository**
-2. **Update the repository URL in `package.json`** (if you forked/renamed):
-   ```json
-   "repository": {
-     "type": "git",
-     "url": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
-   },
-   "homepage": "https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/"
-   ```
-3. **Deploy**:
+1. **Update `package.json`** with your repository details (see above)
+2. **Deploy**:
    ```bash
    npm install
    npm run deploy

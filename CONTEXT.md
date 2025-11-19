@@ -260,6 +260,69 @@ npm run deploy  # Builds and deploys to gh-pages branch
 - **Production Only**: Base path only applies to production builds
 - **Local Development**: Works normally with `/` base path
 
+## JavaScript & React Coding Guidelines
+
+### Arrow Functions vs Regular Functions
+
+This project follows a practical approach to function syntax:
+
+#### Use Arrow Functions When:
+
+- **Simplifies code** (reduces lines of code)
+- **Inline callbacks** and event handlers
+- **Array methods** (map, filter, reduce, etc.)
+- **Short utility functions**
+
+```jsx
+// ✅ Good: Simplifies inline callbacks
+<Button onClick={() => setCount(count + 1)}>
+  Increment
+</Button>
+
+// ✅ Good: Array methods
+const items = data.map(item => item.name);
+const filtered = users.filter(user => user.active);
+
+// ✅ Good: Short utilities
+const getTheme = (mode) => mode === 'dark' ? darkTheme : lightTheme;
+```
+
+#### Use Regular Function Declarations When:
+
+- **Component definitions** (for better stack traces and debugging)
+- **Complex functions** with multiple lines
+- **Functions that benefit from hoisting**
+- **When readability is equivalent**
+
+```jsx
+// ✅ Good: Component definitions
+function Home() {
+  return <div>Home Page</div>;
+}
+
+// ✅ Good: Complex functions
+function calculateTotal(items, tax, discount) {
+  const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+  const discountAmount = subtotal * discount;
+  return (subtotal - discountAmount) * (1 + tax);
+}
+
+// ✅ Good: Exported utilities
+export function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
+}
+```
+
+#### Guidelines:
+
+- **Consistency within scope** - Don't mix styles unnecessarily within the same component/file
+- **Favor readability** - Choose the syntax that makes the code clearer
+- **Consider team preferences** - Regular functions are often more familiar
+- **Use arrow functions for genuine simplification** - Not just because they're "modern"
+
 ## Project Structure Notes
 
 This project uses:
